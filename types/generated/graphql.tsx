@@ -120,6 +120,8 @@ export type ArticleNodeArticleCommentArgs = {
   articleComment?: Maybe<Scalars['ID']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 export type ArticleNodeConnection = {
@@ -137,15 +139,6 @@ export type ArticleNodeEdge = {
   node?: Maybe<ArticleNode>;
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
-};
-
-export type ArticleNodeNodeConnection = {
-  __typename?: 'ArticleNodeNodeConnection';
-  /** Pagination data for this connection. */
-  pageInfo: PageInfoExtra;
-  /** Contains the nodes in this connection. */
-  results: Array<Maybe<ArticleNode>>;
-  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type CommentNode = Node & {
@@ -174,15 +167,6 @@ export type CommentNodeEdge = {
   node?: Maybe<CommentNode>;
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
-};
-
-export type CommentNodeNodeConnection = {
-  __typename?: 'CommentNodeNodeConnection';
-  /** Pagination data for this connection. */
-  pageInfo: PageInfoExtra;
-  /** Contains the nodes in this connection. */
-  results: Array<Maybe<CommentNode>>;
-  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type CreateArticleMutationInput = {
@@ -529,7 +513,7 @@ export type MyUserNode = Node & {
   dateJoined: Scalars['DateTime'];
   email: Scalars['String'];
   userArticle: ArticleNodeConnection;
-  liked: ArticleNodeConnection;
+  likeUsers: ArticleNodeConnection;
   userComment: CommentNodeConnection;
   password: Scalars['String'];
   /** 全ての権限を持っているとみなされます。 */
@@ -548,10 +532,12 @@ export type MyUserNodeUserArticleArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
-export type MyUserNodeLikedArgs = {
+export type MyUserNodeLikeUsersArgs = {
   offset?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
@@ -562,6 +548,8 @@ export type MyUserNodeLikedArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
@@ -576,6 +564,8 @@ export type MyUserNodeUserCommentArgs = {
   articleComment?: Maybe<Scalars['ID']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 export type MyUserNodeConnection = {
@@ -644,14 +634,6 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>;
 };
 
-export type PageInfoExtra = {
-  __typename?: 'PageInfoExtra';
-  /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
-};
-
 export type PasswordChangeInput = {
   clientMutationId?: Maybe<Scalars['String']>;
   oldPassword: Scalars['String'];
@@ -700,9 +682,9 @@ export type PasswordResetPayload = {
 
 export type Query = {
   __typename?: 'Query';
-  allTags?: Maybe<TagNodeNodeConnection>;
-  allArticles?: Maybe<ArticleNodeNodeConnection>;
-  allComments?: Maybe<CommentNodeNodeConnection>;
+  allTags?: Maybe<TagNodeConnection>;
+  allArticles?: Maybe<ArticleNodeConnection>;
+  allComments?: Maybe<CommentNodeConnection>;
   me?: Maybe<UserNode>;
   user?: Maybe<UserNode>;
   users?: Maybe<UserNodeConnection>;
@@ -710,9 +692,7 @@ export type Query = {
 
 
 export type QueryAllTagsArgs = {
-  limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  ordering?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -723,9 +703,7 @@ export type QueryAllTagsArgs = {
 
 
 export type QueryAllArticlesArgs = {
-  limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  ordering?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -735,13 +713,13 @@ export type QueryAllArticlesArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
 export type QueryAllCommentsArgs = {
-  limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  ordering?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -751,6 +729,8 @@ export type QueryAllCommentsArgs = {
   articleComment?: Maybe<Scalars['ID']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
@@ -892,11 +872,11 @@ export type TagNode = Node & {
   /** The ID of the object. */
   id: Scalars['ID'];
   name: Scalars['String'];
-  tag: ArticleNodeConnection;
+  tagArticle: ArticleNodeConnection;
 };
 
 
-export type TagNodeTagArgs = {
+export type TagNodeTagArticleArgs = {
   offset?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
@@ -907,6 +887,8 @@ export type TagNodeTagArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 export type TagNodeConnection = {
@@ -924,15 +906,6 @@ export type TagNodeEdge = {
   node?: Maybe<TagNode>;
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
-};
-
-export type TagNodeNodeConnection = {
-  __typename?: 'TagNodeNodeConnection';
-  /** Pagination data for this connection. */
-  pageInfo: PageInfoExtra;
-  /** Contains the nodes in this connection. */
-  results: Array<Maybe<TagNode>>;
-  totalCount?: Maybe<Scalars['Int']>;
 };
 
 export type UpdateAccountInput = {
@@ -1008,7 +981,7 @@ export type UserNode = Node & {
   dateJoined: Scalars['DateTime'];
   email: Scalars['String'];
   userArticle: ArticleNodeConnection;
-  liked: ArticleNodeConnection;
+  likeUsers: ArticleNodeConnection;
   userComment: CommentNodeConnection;
   pk?: Maybe<Scalars['Int']>;
   archived?: Maybe<Scalars['Boolean']>;
@@ -1028,10 +1001,12 @@ export type UserNodeUserArticleArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
-export type UserNodeLikedArgs = {
+export type UserNodeLikeUsersArgs = {
   offset?: Maybe<Scalars['Int']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
@@ -1042,6 +1017,8 @@ export type UserNodeLikedArgs = {
   tags?: Maybe<Array<Maybe<Scalars['ID']>>>;
   isRelease?: Maybe<Scalars['Boolean']>;
   liked?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 
@@ -1056,6 +1033,8 @@ export type UserNodeUserCommentArgs = {
   articleComment?: Maybe<Scalars['ID']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orderByCreatedAt?: Maybe<Scalars['String']>;
+  orderByUpdatedAt?: Maybe<Scalars['String']>;
 };
 
 export type UserNodeConnection = {
@@ -1108,6 +1087,23 @@ export type VerifyTokenPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
 };
 
+export type AllTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllTagsQuery = (
+  { __typename?: 'Query' }
+  & { allTags?: Maybe<(
+    { __typename?: 'TagNodeConnection' }
+    & { edges: Array<Maybe<(
+      { __typename?: 'TagNodeEdge' }
+      & { node?: Maybe<(
+        { __typename?: 'TagNode' }
+        & Pick<TagNode, 'id' | 'name'>
+      )> }
+    )>> }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1120,6 +1116,45 @@ export type MeQuery = (
 );
 
 
+export const AllTagsDocument = gql`
+    query allTags {
+  allTags {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllTagsQuery__
+ *
+ * To run a query within a React component, call `useAllTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllTagsQuery(baseOptions?: Apollo.QueryHookOptions<AllTagsQuery, AllTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllTagsQuery, AllTagsQueryVariables>(AllTagsDocument, options);
+      }
+export function useAllTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllTagsQuery, AllTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllTagsQuery, AllTagsQueryVariables>(AllTagsDocument, options);
+        }
+export type AllTagsQueryHookResult = ReturnType<typeof useAllTagsQuery>;
+export type AllTagsLazyQueryHookResult = ReturnType<typeof useAllTagsLazyQuery>;
+export type AllTagsQueryResult = Apollo.QueryResult<AllTagsQuery, AllTagsQueryVariables>;
 export const MeDocument = gql`
     query me {
   me {
