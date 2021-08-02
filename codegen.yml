@@ -1,6 +1,6 @@
 overwrite: true
 schema: "https://my-blog-api-01.herokuapp.com/graphql"
-documents: "queries/**/.graphql"
+documents: "queries/**/*.graphql"
 generates:
   types/generated/graphql.tsx:
     plugins:
